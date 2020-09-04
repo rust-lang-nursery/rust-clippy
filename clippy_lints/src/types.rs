@@ -1102,6 +1102,31 @@ declare_clippy_lint! {
 }
 
 declare_clippy_lint! {
+    /// **What it does:** Checks for casts of function directly to a usize
+    ///
+    /// **Why is this bad?**
+    /// Casting a function directly to a usize is likely a mistake. Most likely, the intended behavior
+    /// is calling the function. If casting to a usize is intended, it would be more clearly expressed
+    /// by casting to a function pointer, then to a usize.
+    ///
+    /// **Example**
+    ///
+    /// ```rust
+    /// // Bad
+    /// fn fun() -> usize { 1 }
+    /// let a: usize = fun as usize;
+    ///
+    /// // Good
+    /// fn fun2() -> usize { 1 }
+    /// let a: usize = fun2 as fn() -> usize as usize;
+    /// let b: usize = fun2();
+    /// ```
+    pub FN_TO_NUMERIC_CAST_USIZE,
+    style,
+    "casting a function to a usize"
+}
+
+declare_clippy_lint! {
     /// **What it does:** Checks for casts of a function pointer to a numeric type not wide enough to
     /// store address.
     ///
@@ -1375,6 +1400,7 @@ declare_lint_pass!(Casts => [
     UNNECESSARY_CAST,
     CAST_PTR_ALIGNMENT,
     FN_TO_NUMERIC_CAST,
+    FN_TO_NUMERIC_CAST_USIZE,
     FN_TO_NUMERIC_CAST_WITH_TRUNCATION,
 ]);
 
@@ -1559,15 +1585,55 @@ fn lint_fn_to_numeric_cast(
 ) {
     // We only want to check casts to `ty::Uint` or `ty::Int`
     match cast_to.kind {
-        ty::Uint(_) | ty::Int(..) => { /* continue on */ },
+        ty::Uint(_) | ty::Int(_) => { /* continue on */ },
         _ => return,
     }
-    match cast_from.kind {
-        ty::FnDef(..) | ty::FnPtr(_) => {
-            let mut applicability = Applicability::MaybeIncorrect;
-            let from_snippet = snippet_with_applicability(cx, cast_expr.span, "x", &mut applicability);
 
-            let to_nbits = int_ty_to_nbits(cast_to, cx.tcx);
+    let is_def = matches!(cast_from.kind, ty::FnDef(..));
+    let is_ptr = matches!(cast_from.kind, ty::FnPtr(_));
+
+    if is_def || is_ptr {
+        let mut applicability = Applicability::MaybeIncorrect;
+        let from_snippet = snippet_with_applicability(cx, cast_expr.span, "x", &mut applicability);
+
+        let to_nbits = int_ty_to_nbits(cast_to, cx.tcx);
+
+        if is_def {
+            if to_nbits < cx.tcx.data_layout.pointer_size.bits() {
+                span_lint_and_sugg(
+                    cx,
+                    FN_TO_NUMERIC_CAST_WITH_TRUNCATION,
+                    expr.span,
+                    &format!(
+                        "casting *pointer* to function `{}` as `{}`, which truncates the value",
+                        from_snippet, cast_to
+                    ),
+                    "try",
+                    format!("{}() as {}", from_snippet, cast_to),
+                    applicability,
+                );
+            } else if cast_to.kind == ty::Uint(UintTy::Usize) {
+                span_lint_and_sugg(
+                    cx,
+                    FN_TO_NUMERIC_CAST_USIZE,
+                    expr.span,
+                    &format!("casting *pointer* to function `{}` as `{}`", from_snippet, cast_to),
+                    "try",
+                    format!("{}() as {}", from_snippet, cast_to),
+                    applicability,
+                );
+            } else {
+                span_lint_and_sugg(
+                    cx,
+                    FN_TO_NUMERIC_CAST,
+                    expr.span,
+                    &format!("casting *pointer* to function `{}` as `{}`", from_snippet, cast_to),
+                    "try",
+                    format!("{}() as {}", from_snippet, cast_to),
+                    applicability,
+                );
+            }
+        } else if is_ptr {
             if to_nbits < cx.tcx.data_layout.pointer_size.bits() {
                 span_lint_and_sugg(
                     cx,
@@ -1592,8 +1658,7 @@ fn lint_fn_to_numeric_cast(
                     applicability,
                 );
             }
-        },
-        _ => {},
+        }
     }
 }
 

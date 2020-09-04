@@ -697,6 +697,13 @@ pub static ref ALL_LINTS: Vec<Lint> = vec![
         module: "types",
     },
     Lint {
+        name: "fn_to_numeric_cast_usize",
+        group: "style",
+        desc: "casting a function to a usize",
+        deprecation: None,
+        module: "types",
+    },
+    Lint {
         name: "fn_to_numeric_cast_with_truncation",
         group: "style",
         desc: "casting a function pointer to a numeric type not wide enough to store the address",

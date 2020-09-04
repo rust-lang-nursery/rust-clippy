@@ -44,7 +44,7 @@ error: transmute from `fn(usize) -> u8 {main::foo}` to `usize` which could be ex
   --> $DIR/transmutes_expressible_as_ptr_casts.rs:53:49
    |
 LL |     let _usize_from_fn_ptr_transmute = unsafe { transmute::<fn(usize) -> u8, usize>(foo) };
-   |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `foo as usize`
+   |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: try: `foo as fn(usize) -> u8 as usize`
 
 error: transmute from a reference to a pointer
   --> $DIR/transmutes_expressible_as_ptr_casts.rs:65:14

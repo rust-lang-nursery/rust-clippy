@@ -50,7 +50,7 @@ fn main() {
     let _usize_ptr_transmute = foo as *const usize;
 
     // e is a function pointer type and U is an integer; fptr-addr-cast
-    let _usize_from_fn_ptr_transmute = unsafe { foo as usize };
+    let _usize_from_fn_ptr_transmute = unsafe { foo as fn(usize) -> u8 as usize };
     let _usize_from_fn_ptr = foo as *const usize;
 }
 

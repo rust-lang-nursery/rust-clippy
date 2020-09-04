@@ -1,6 +1,10 @@
 // ignore-32bit
 
-#![warn(clippy::fn_to_numeric_cast, clippy::fn_to_numeric_cast_with_truncation)]
+#![warn(
+    clippy::fn_to_numeric_cast,
+    clippy::fn_to_numeric_cast_usize,
+    clippy::fn_to_numeric_cast_with_truncation
+)]
 
 fn foo() -> String {
     String::new()
@@ -19,9 +23,10 @@ fn test_function_to_numeric_cast() {
     let _ = foo as u32;
     let _ = foo as u64;
     let _ = foo as u128;
-
-    // Casting to usize is OK and should not warn
     let _ = foo as usize;
+
+    // Casting to fn pointer is OK and should not warn
+    let _ = foo as fn() -> String;
 
     // Cast `f` (a `FnDef`) to `fn()` should not warn
     fn f() {}
