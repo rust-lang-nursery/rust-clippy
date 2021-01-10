@@ -1,21 +1,21 @@
 error: `x` is shadowed by itself in `&mut x`
-  --> $DIR/shadow.rs:27:5
+  --> $DIR/shadow.rs:27:9
    |
 LL |     let x = &mut x;
-   |     ^^^^^^^^^^^^^^^
+   |         ^
    |
    = note: `-D clippy::shadow-same` implied by `-D warnings`
 note: previous binding is here
-  --> $DIR/shadow.rs:26:13
+  --> $DIR/shadow.rs:26:9
    |
 LL |     let mut x = 1;
-   |             ^
+   |         ^^^^^
 
 error: `x` is shadowed by itself in `{ x }`
-  --> $DIR/shadow.rs:28:5
+  --> $DIR/shadow.rs:28:9
    |
 LL |     let x = { x };
-   |     ^^^^^^^^^^^^^^
+   |         ^
    |
 note: previous binding is here
   --> $DIR/shadow.rs:27:9
@@ -24,10 +24,10 @@ LL |     let x = &mut x;
    |         ^
 
 error: `x` is shadowed by itself in `(&*x)`
-  --> $DIR/shadow.rs:29:5
+  --> $DIR/shadow.rs:29:9
    |
 LL |     let x = (&*x);
-   |     ^^^^^^^^^^^^^^
+   |         ^
    |
 note: previous binding is here
   --> $DIR/shadow.rs:28:9
@@ -84,7 +84,7 @@ note: previous binding is here
 LL |     let x = (1, x);
    |         ^
 
-error: `x` is being shadowed
+error: `x` shadows a previous, unrelated binding
   --> $DIR/shadow.rs:35:9
    |
 LL |     let x = y;
@@ -97,11 +97,11 @@ note: previous binding is here
 LL |     let x = first(x);
    |         ^
 
-error: `x` shadows a previous declaration
-  --> $DIR/shadow.rs:37:5
+error: `x` shadows a previous, unrelated binding
+  --> $DIR/shadow.rs:37:9
    |
 LL |     let x;
-   |     ^^^^^^
+   |         ^
    |
 note: previous binding is here
   --> $DIR/shadow.rs:35:9
