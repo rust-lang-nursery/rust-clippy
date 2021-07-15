@@ -1,0 +1,11 @@
+error: Result::unwrap_or_else is shorter and more succinet
+  --> $DIR/unwrap_or_else_over_map_or_else.rs:16:25
+   |
+LL |     let val_2 = out_put.map_or_else(|_| number * 2, |v| 3);
+   |                         ^^^^^^^^^^^
+   |
+   = note: `-D clippy::unwrap-or-else-over-map-or-else` implied by `-D warnings`
+   = help: consider unwrap_or_else(|e| handle_the_error(e)) to unpack result
+
+error: aborting due to previous error
+
