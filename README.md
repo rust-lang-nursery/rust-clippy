@@ -141,6 +141,41 @@ That includes warnings found by rustc (e.g. `dead_code`, etc.). If you want to a
 an error for Clippy warnings, use `#![deny(clippy::all)]` in your code or `-D clippy::all` on the command
 line. (You can swap `clippy::all` with the specific lint category you are targeting.)
 
+### Install from source
+
+If you are hacking on Clippy and want to install it from source, do the following:
+
+First, take note of the toolchain [override](https://rust-lang.github.io/rustup/overrides.html) in `/rust-toolchain`.
+We will use this override to install Clippy into the right toolchain.
+
+> Tip: You can view the active toolchain for the current directory with `rustup show active-toolchain`.
+
+From the Clippy project root, run the following command to build the Clippy executables (`clippy-driver` and
+`cargo-clippy`) and copy them into the toolchain directory. This may replace the currently installed clippy
+component.
+
+```terminal
+cargo build -Zunstable-options --out-dir "$(rustc --print=sysroot)/bin" --release
+```
+
+Now you may run `cargo clippy` in any project, using the toolchain where you just installed Clippy.
+
+```terminal
+cd my-project
+cargo +nightly-2021-07-01 clippy
+```
+
+If you need to restore the default Clippy installation, run the following (from the Clippy project root).
+
+```terminal
+rustup component remove clippy
+rustup component add clippy
+```
+
+> Note: Another method is to use `cargo install --path . --force`, but this is not recommended since it overwrites
+rustup [proxies](https://rust-lang.github.io/rustup/concepts/proxies.html) (part of rustup itself). That is,
+`~/.cargo/bin/cargo-clippy` and `~/.cargo/bin/clippy-driver` should be hard or soft links to `~/.cargo/bin/rustup`.
+
 ## Configuration
 
 Some lints can be configured in a TOML file named `clippy.toml` or `.clippy.toml`. It contains a basic `variable =
