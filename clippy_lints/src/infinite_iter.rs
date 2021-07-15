@@ -6,14 +6,14 @@ use rustc_lint::{LateContext, LateLintPass};
 use rustc_session::{declare_lint_pass, declare_tool_lint};
 
 declare_clippy_lint! {
-    /// **What it does:** Checks for iteration that is guaranteed to be infinite.
+    /// ### What it does
+    /// Checks for iteration that is guaranteed to be infinite.
     ///
-    /// **Why is this bad?** While there may be places where this is acceptable
+    /// ### Why is this bad?
+    /// While there may be places where this is acceptable
     /// (e.g., in event streams), in most cases this is simply an error.
     ///
-    /// **Known problems:** None.
-    ///
-    /// **Example:**
+    /// ### Example
     /// ```no_run
     /// use std::iter;
     ///
@@ -25,15 +25,18 @@ declare_clippy_lint! {
 }
 
 declare_clippy_lint! {
-    /// **What it does:** Checks for iteration that may be infinite.
+    /// ### What it does
+    /// Checks for iteration that may be infinite.
     ///
-    /// **Why is this bad?** While there may be places where this is acceptable
+    /// ### Why is this bad?
+    /// While there may be places where this is acceptable
     /// (e.g., in event streams), in most cases this is simply an error.
     ///
-    /// **Known problems:** The code may have a condition to stop iteration, but
+    /// ### Known problems
+    /// The code may have a condition to stop iteration, but
     /// this lint is not clever enough to analyze it.
     ///
-    /// **Example:**
+    /// ### Example
     /// ```rust
     /// let infinite_iter = 0..;
     /// [0..].iter().zip(infinite_iter.take_while(|x| *x > 5));

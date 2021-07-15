@@ -9,16 +9,15 @@ use rustc_session::{declare_tool_lint, impl_lint_pass};
 use rustc_span::{Span, Symbol};
 
 declare_clippy_lint! {
-    /// **What it does:** Denies the configured types in clippy.toml.
+    /// ### What it does
+    /// Denies the configured types in clippy.toml.
     ///
-    /// **Why is this bad?** Some types are undesirable in certain contexts.
-    ///
-    /// **Known problems:** None.
+    /// ### Why is this bad?
+    /// Some types are undesirable in certain contexts.
     ///
     /// N.B. There is no way to ban primitive types.
     ///
-    /// **Example:**
-    ///
+    /// ### Example
     /// An example clippy.toml configuration:
     /// ```toml
     /// # clippy.toml

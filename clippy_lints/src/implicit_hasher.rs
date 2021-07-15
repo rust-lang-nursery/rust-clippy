@@ -23,18 +23,21 @@ use clippy_utils::ty::is_type_diagnostic_item;
 use clippy_utils::{differing_macro_contexts, match_def_path};
 
 declare_clippy_lint! {
-    /// **What it does:** Checks for public `impl` or `fn` missing generalization
+    /// ### What it does
+    /// Checks for public `impl` or `fn` missing generalization
     /// over different hashers and implicitly defaulting to the default hashing
     /// algorithm (`SipHash`).
     ///
-    /// **Why is this bad?** `HashMap` or `HashSet` with custom hashers cannot be
+    /// ### Why is this bad?
+    /// `HashMap` or `HashSet` with custom hashers cannot be
     /// used with them.
     ///
-    /// **Known problems:** Suggestions for replacing constructors can contain
+    /// ### Known problems
+    /// Suggestions for replacing constructors can contain
     /// false-positives. Also applying suggestions can require modification of other
     /// pieces of code, possibly including external crates.
     ///
-    /// **Example:**
+    /// ### Example
     /// ```rust
     /// # use std::collections::HashMap;
     /// # use std::hash::{Hash, BuildHasher};
