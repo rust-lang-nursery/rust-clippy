@@ -113,3 +113,10 @@ macro_rules! default_numeric_fallback {
         let x = 22;
     };
 }
+
+#[macro_export]
+macro_rules! unsafe_external_macro {
+    ($e:expr) => {
+        unsafe { $e }
+    };
+}

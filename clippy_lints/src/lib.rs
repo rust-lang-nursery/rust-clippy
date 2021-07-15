@@ -252,6 +252,7 @@ mod lifetimes;
 mod literal_representation;
 mod loops;
 mod macro_use;
+mod macros_hiding_unsafe_code;
 mod main_recursion;
 mod manual_async_fn;
 mod manual_map;
@@ -707,6 +708,7 @@ pub fn register_plugins(store: &mut rustc_lint::LintStore, sess: &Session, conf:
         loops::WHILE_LET_LOOP,
         loops::WHILE_LET_ON_ITERATOR,
         macro_use::MACRO_USE_IMPORTS,
+        macros_hiding_unsafe_code::MACROS_HIDING_UNSAFE_CODE,
         main_recursion::MAIN_RECURSION,
         manual_async_fn::MANUAL_ASYNC_FN,
         manual_map::MANUAL_MAP,
@@ -1018,6 +1020,7 @@ pub fn register_plugins(store: &mut rustc_lint::LintStore, sess: &Session, conf:
         LintId::of(integer_division::INTEGER_DIVISION),
         LintId::of(let_underscore::LET_UNDERSCORE_MUST_USE),
         LintId::of(literal_representation::DECIMAL_LITERAL_REPRESENTATION),
+        LintId::of(macros_hiding_unsafe_code::MACROS_HIDING_UNSAFE_CODE),
         LintId::of(map_err_ignore::MAP_ERR_IGNORE),
         LintId::of(matches::REST_PAT_IN_FULLY_BOUND_STRUCTS),
         LintId::of(matches::WILDCARD_ENUM_MATCH_ARM),
@@ -2101,6 +2104,7 @@ pub fn register_plugins(store: &mut rustc_lint::LintStore, sess: &Session, conf:
     let scripts = conf.allowed_scripts.clone();
     store.register_early_pass(move || box disallowed_script_idents::DisallowedScriptIdents::new(&scripts));
     store.register_late_pass(|| box strlen_on_c_strings::StrlenOnCStrings);
+    store.register_late_pass(|| box macros_hiding_unsafe_code::MacrosHidingUnsafeCode::default());
 }
 
 #[rustfmt::skip]

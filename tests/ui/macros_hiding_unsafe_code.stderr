@@ -1,0 +1,34 @@
+error: this macro call hides unsafe code
+  --> $DIR/macros_hiding_unsafe_code.rs:42:9
+   |
+LL |         unsafe_macro!(std::ptr::read(x));
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: wrap it in an `unsafe` block: `#[allow(unused_unsafe)] unsafe { unsafe_macro!(std::ptr::read(x)); }`
+   |
+   = note: `-D clippy::macros-hiding-unsafe-code` implied by `-D warnings`
+
+error: this macro call hides unsafe code
+  --> $DIR/macros_hiding_unsafe_code.rs:43:9
+   |
+LL |         unsafe_macro!(NESTED std::ptr::read(&x));
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: wrap it in an `unsafe` block: `#[allow(unused_unsafe)] unsafe { unsafe_macro!(NESTED std::ptr::read(&x)); }`
+
+error: this macro call hides unsafe code
+  --> $DIR/macros_hiding_unsafe_code.rs:44:9
+   |
+LL |         unsafe_external_macro!(std::ptr::read(x));
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: wrap it in an `unsafe` block: `unsafe { unsafe_external_macro!(std::ptr::read(x)); }`
+
+error: this macro call hides unsafe code
+  --> $DIR/macros_hiding_unsafe_code.rs:57:9
+   |
+LL |         unsafe_macro!(std::ptr::read(x));
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: wrap it in an `unsafe` block: `unsafe { unsafe_macro!(std::ptr::read(x)); }`
+
+error: this macro call hides unsafe code
+  --> $DIR/macros_hiding_unsafe_code.rs:58:9
+   |
+LL |         unsafe_external_macro!(std::ptr::read(x));
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ help: wrap it in an `unsafe` block: `unsafe { unsafe_external_macro!(std::ptr::read(x)); }`
+
+error: aborting due to 5 previous errors
+
