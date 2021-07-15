@@ -85,12 +85,6 @@ LL |     [42, get_number()];
    |     ^^^^^^^^^^^^^^^^^^^ help: replace it with: `42;get_number();`
 
 error: statement can be reduced
-  --> $DIR/unnecessary_operation.rs:65:5
-   |
-LL |     [42, 55][get_usize()];
-   |     ^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `[42, 55];get_usize();`
-
-error: statement can be reduced
   --> $DIR/unnecessary_operation.rs:66:5
    |
 LL |     (42, get_number()).1;
@@ -101,12 +95,6 @@ error: statement can be reduced
    |
 LL |     [get_number(); 55];
    |     ^^^^^^^^^^^^^^^^^^^ help: replace it with: `get_number();`
-
-error: statement can be reduced
-  --> $DIR/unnecessary_operation.rs:68:5
-   |
-LL |     [42; 55][get_usize()];
-   |     ^^^^^^^^^^^^^^^^^^^^^^ help: replace it with: `[42; 55];get_usize();`
 
 error: statement can be reduced
   --> $DIR/unnecessary_operation.rs:69:5
@@ -124,5 +112,5 @@ LL | |         s: String::from("blah"),
 LL | |     };
    | |______^ help: replace it with: `String::from("blah");`
 
-error: aborting due to 20 previous errors
+error: aborting due to 18 previous errors
 

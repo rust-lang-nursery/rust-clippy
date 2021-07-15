@@ -126,7 +126,12 @@ fn reduce_expression<'a>(cx: &LateContext<'_>, expr: &'a Expr<'a>) -> Option<Vec
         return None;
     }
     match expr.kind {
-        ExprKind::Index(a, b) => Some(vec![a, b]),
+        ExprKind::Index(a, b) => {
+            match b.kind {
+                ExprKind::Call(_, _) => None,
+                _ => Some(vec![a, b])
+            }
+        },
         ExprKind::Binary(ref binop, a, b) if binop.node != BinOpKind::And && binop.node != BinOpKind::Or => {
             Some(vec![a, b])
         },
